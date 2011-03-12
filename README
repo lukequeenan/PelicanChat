@@ -1,8 +1,17 @@
 Pelican Chat Program for Linux
 
-COMP 4981 Assignment Three
+Designed to meet the requirements in COMP 4981 Assignment Three at BCIT.
 
 Authors:
     Luke Queenan
     Joel Stewart
 
+Instructions for compiling and running:
+
+    Server:
+        When inside server folder, run 'make -j#' where # is the number of cores
+        on your machine, then './PelicanChatServer'.
+
+    Client:
+        When inside client folder, run 'qmake', then 'make -j#' where # is the
+        number of cores on your machine, then './PelicanChatClient'.
