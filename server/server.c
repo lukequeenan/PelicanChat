@@ -4,7 +4,7 @@
 -- PROGRAM: Pelican Chat Program
 --
 -- FUNCTIONS:
--- int main(int argc , char *argv[]);
+-- void server(int port, int maxClients);
 --
 -- DATE: March 12, 2011
 --
@@ -17,9 +17,11 @@
 -- NOTES:
 --
 */
+void server (int port, int maxClients);
 
-int main (int argc, char **argv)
+
+void server (int port, int maxClients)
 {
-    return 0;
+    // Call wrapper functions for setting up connections
 }
 
