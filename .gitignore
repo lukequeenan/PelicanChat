@@ -10,16 +10,10 @@ tags
 *.orig
 moc_*.cpp
 Makefile*
-/doc
-/bin
-/lib
-/obj
-/sound
 .qdevelop
 *.user
 *.plist
-/td.xcodeproj
-/img
 core
 ui_*
 *.pdf
+*.out
