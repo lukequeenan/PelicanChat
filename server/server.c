@@ -37,6 +37,7 @@ void server (int port, int maxClients)
     int selectReturn = 0;
     int count = 0;
     int selectReady = 0;
+    int clientIndex = 0;
     int clients[FD_SETSIZE];
     fd_set returnFileDescriptorSet;
     fd_set fileDescriptorSet;
@@ -46,6 +47,7 @@ void server (int port, int maxClients)
     
     // Set the limit for file descriptor to select on
     maxFileDescriptor = listenSocket;
+    clientIndex = EMPTY;
     
     // Initialize the array of clients
     for (count = 0; count < FD_SETSIZE; count++)
@@ -60,6 +62,20 @@ void server (int port, int maxClients)
         fileDescriptorSet = fileDescriptorSet;
         selectReady = select(maxFileDescriptor + 1, &returnFileDescriptorSet,
                                 NULL, NULL, NULL);
+        // Check for a new client connection
+        if (FD_ISSET(listenSocket, &returnFileDescriptorSet))
+        {
+            if (acceptConnection(&listenSocket) == -1)
+            {
+                systemFatal("Unable To Accept Connection");
+            }
+        }
+        
+        // Check for data from clients
+        for (count = 0; count <= clientIndex; count++)
+        {
+        
+        }
     }
     
 }
