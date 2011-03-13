@@ -23,7 +23,7 @@
 
 #include "../network/network.h"
 
-#define EMPTY -1
+#define FREE -1
 #define TRUE 1
 
 void server (int port, int maxClients);
@@ -39,7 +39,7 @@ void server (int port, int maxClients)
     int index = 0;
     int clientIndex = 0;
     int clients[maxClients];
-    fd_set returnFileDescriptorSet;
+    fd_set availableFileDescriptors;
     fd_set fileDescriptorSet;
     
     // Set up server
@@ -47,23 +47,23 @@ void server (int port, int maxClients)
     
     // Set the limit for file descriptor to select on
     maxFileDescriptor = listenSocket;
-    clientIndex = EMPTY;
+    clientIndex = FREE;
     
     // Initialize the array of clients
     for (index = 0; index < maxClients; index++)
     {
-        clients[index] = EMPTY;
+        clients[index] = FREE;
     }
     FD_ZERO(&fileDescriptorSet);
     FD_SET(listenSocket, &fileDescriptorSet);
     
     while (TRUE)
     {
-        returnFileDescriptorSet = fileDescriptorSet;
-        selectReturn = select(maxFileDescriptor + 1, &returnFileDescriptorSet,
+        availableFileDescriptors = fileDescriptorSet;
+        selectReturn = select(maxFileDescriptor + 1, &availableFileDescriptors,
                                 NULL, NULL, NULL);
         // Check for a new client connection
-        if (FD_ISSET(listenSocket, &returnFileDescriptorSet))
+        if (FD_ISSET(listenSocket, &availableFileDescriptors))
         {
             if ((clientSocket = acceptConnection(&listenSocket)) == -1)
             {
@@ -111,10 +111,19 @@ void server (int port, int maxClients)
         // Check for data from clients
         for (index = 0; index <= clientIndex; index++)
         {
-        
+            // If the socket is free, continue through the loop
+            if ((clientSocket = clients[index]) < 0)
+            {
+                continue;
+            }
+            
+            // Check to see if the this is the right client
+            if (FD_ISSET(clientSocket, &availableFileDescriptors))
+            {
+                
+            }
         }
     }
-    
 }
 
 void initializeServer(int *listenSocket, int *port)
