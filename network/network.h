@@ -10,4 +10,5 @@ int tcpSocket();
 int setReuse(int* socket);
 int bindAddress(int *port, int *socket);
 int setListen(int *socket);
+int acceptConnection(int *listenSocket);
 #endif

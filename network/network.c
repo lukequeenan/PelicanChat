@@ -29,3 +29,10 @@ int setListen(int *socket)
 {
     return listen(*socket, MAX_QUEUE);
 }
+
+int acceptConnection(int *listenSocket)
+{
+    struct sockaddr_in clientAddress;
+    int arg = sizeof(clientAddress);
+    return accept(*listenSocket, (struct sockaddr *) &clientAddress, &arg);
+}
