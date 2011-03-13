@@ -18,3 +18,4 @@ ui_*
 *.pdf
 *.out
 PelicanChatClient
+PelicanChatServer
