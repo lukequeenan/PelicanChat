@@ -9,7 +9,7 @@ tags
 *.o
 *.orig
 moc_*.cpp
-Makefile*
+client/Makefile*
 .qdevelop
 *.user
 *.plist
