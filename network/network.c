@@ -1,5 +1,12 @@
 #include "network.h"
 
+// Includes
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <strings.h>
+
 #define MAX_QUEUE 10
 
 int tcpSocket()
@@ -36,4 +43,15 @@ int acceptConnection(int *listenSocket)
     struct sockaddr_in clientAddress;
     socklen_t addrlen = sizeof(clientAddress);
     return accept(*listenSocket, (struct sockaddr *) &clientAddress, &addrlen);
+}
+
+int readData(int *socket, char *buffer, int bytesToRead)
+{
+    int bytesRead = 0;
+    while ((bytesRead = read(*socket, buffer, bytesToRead)) > 0)
+    {
+        buffer += bytesRead;
+        bytesToRead -= bytesRead;
+    }
+    return bytesRead;
 }
