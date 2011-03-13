@@ -3,7 +3,11 @@
 // Includes
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <netinet/in.h>
+#include <strings.h>
 // Function Prototypes
 int tcpSocket();
-int setReuse(int*);
+int setReuse(int* socket);
+int bindAddress(int *port, int *socket);
+int setListen(int *socket);
 #endif
