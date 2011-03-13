@@ -10,7 +10,7 @@ project: network.o server.o main.o
 clean:
 	rm -f *.o *.bak ex
 
-network.o: ../network/network.c ../network/network.h
+network.o: $(NETWORKPATH)network.c $(NETWORKPATH)network.h
 	$(CC) $(CFLAGS) -O -c $(NETWORKPATH)network.c
 
 server.o: server.c
