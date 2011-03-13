@@ -23,7 +23,7 @@
 #include <unistd.h>
 
 #define DEFAULT_PORT 8929
-#define MAX_CLIENTS 5
+
 int main(int argc, char *argv[]);
 
 /*
@@ -51,7 +51,7 @@ int main (int argc, char **argv)
 {
     // Initialize port and maxClients to default values in case of no user input
     int port = DEFAULT_PORT;
-    int maxClients = MAX_CLIENTS;
+    int maxClients = FD_SETSIZE;
     int option = 0;
 
     // Parse command line paramters using getopt
