@@ -23,8 +23,10 @@
 
 #define FREE -1
 #define TRUE 1
+#define BUFFER_LENGTH 160
 
 void initializeServer (int *listenSocket, int *port);
+int processMessage(int clientIndex, int clients[], int numberOfClients);
 static void systemFatal (const char*);
 
 void server (int port, int maxClients)
@@ -74,7 +76,7 @@ void server (int port, int maxClients)
                     break;
                 }
             }
-            
+
             if (index == maxClients)
             {
                 /* Unable to accept another client, should display error, but
@@ -104,7 +106,7 @@ void server (int port, int maxClients)
                 }
             }
         }
-        
+
         // Check for data from clients
         for (index = 0; index <= clientIndex; index++)
         {
@@ -117,10 +119,51 @@ void server (int port, int maxClients)
             // Check to see if the this is the right client
             if (FD_ISSET(clientSocket, &availableFileDescriptors))
             {
-                
+                if (processMessage(index, &clients[0], clientIndex) == -1)
+                {
+                    if (closeSocket(&clientSocket) == -1)
+                    {
+                        systemFatal("Cannot Close Socket!");
+                    }
+                    FD_CLR(clientSocket, &fileDescriptorSet);
+                    clients[clientIndex] = FREE;
+                }
+            }
+            
+            // See if there are any more clients to check
+            if (--selectReturn <= 0)
+            {
+                break;
             }
         }
     }
+}
+
+int processMessage(int clientIndex, int clients[], int numberOfClients)
+{
+    char *buffer = (char*)malloc(sizeof(char) * BUFFER_LENGTH);
+    int bytesRead = 0;
+    int count = 0;
+    
+    // Read message
+    bytesRead = readData(&(clients[clientIndex]), &(*buffer), BUFFER_LENGTH);
+    
+    // Check if client disconnected
+    if (bytesRead == 0)
+    {
+        return -1;
+    }
+    
+    // Send message
+    for (count = 0; count < numberOfClients; count++)
+    {
+        if (clients[count] > 0 && clients[count] != clients[clientIndex])
+        {
+            sendData(&(clients[count]), &(*buffer), BUFFER_LENGTH);
+        }
+    }
+
+    return 1;
 }
 
 void initializeServer(int *listenSocket, int *port)

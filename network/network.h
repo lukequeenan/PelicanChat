@@ -7,6 +7,8 @@ int setReuse(int* socket);
 int bindAddress(int *port, int *socket);
 int setListen(int *socket);
 int acceptConnection(int *listenSocket);
-int readData(int *socket, char *buffer, int bytesToRead)
+int readData(int *socket, char *buffer, int bytesToRead);
+int sendData(int *socket, char *buffer, int bytesToSend);
+int closeSocket(int *socket);
 
 #endif

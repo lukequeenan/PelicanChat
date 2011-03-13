@@ -1,11 +1,11 @@
-#include "network.h"
-
 // Includes
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <strings.h>
+
+#include "network.h"
 
 #define MAX_QUEUE 10
 
@@ -55,3 +55,14 @@ int readData(int *socket, char *buffer, int bytesToRead)
     }
     return bytesRead;
 }
+
+int sendData(int *socket, char *buffer, int bytesToSend)
+{
+    return write(*socket, buffer, bytesToSend);
+}
+
+int closeSocket(int *socket)
+{
+    return close(*socket);
+}
+
