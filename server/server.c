@@ -17,8 +17,11 @@
 -- NOTES:
 --
 */
-#include <sys/types.h>
-#include "../network/connect.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+
+#include "../network/network.h"
 
 void server (int port, int maxClients);
 static void systemFatal(const char*);
@@ -28,7 +31,7 @@ void server (int port, int maxClients)
     int listenSocket = 0;
     int clients[FD_SETSIZE];
     // Call wrapper functions for setting up connection
-    if ((listenSocket = tcpSocket) == -1)
+    if ((listenSocket = tcpSocket()) == -1)
     {
         systemFatal("Cannot Create Socket!");
     }

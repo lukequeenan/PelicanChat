@@ -1,6 +1,8 @@
+#include "network.h"
+
 int tcpSocket()
 {
-    return socket(AF_INET, SOCKSTREAM, 0);
+    return socket(AF_INET, SOCK_STREAM, 0);
 }
 
 int setReuse(int *socket)

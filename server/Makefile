@@ -4,13 +4,13 @@ CC=gcc
 CFLAGS=-W -Wall
 NETWORKPATH=../network/
 
-project: main.o network.o server.o
+project: network.o server.o main.o
 	$(CC) $(CFLAGS) main.o network.o server.o -o PelicanChatServer
 
 clean:
 	rm -f *.o *.bak ex
 
-network.o: network.c network.h
+network.o: ../network/network.c ../network/network.h
 	$(CC) $(CFLAGS) -O -c $(NETWORKPATH)network.c
 
 server.o: server.c
