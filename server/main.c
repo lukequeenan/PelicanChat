@@ -24,7 +24,7 @@
 
 #define DEFAULT_PORT 8929
 
-int main(int argc, char *argv[]);
+int main(int argc, char **argv);
 
 /*
 -- FUNCTION: main

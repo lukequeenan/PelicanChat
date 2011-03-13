@@ -33,12 +33,12 @@ static void systemFatal(const char*);
 void server (int port, int maxClients)
 {
     int listenSocket = 0;
+    int clientSocket = 0;
     int maxFileDescriptor = 0;
     int selectReturn = 0;
-    int count = 0;
-    int selectReady = 0;
+    int index = 0;
     int clientIndex = 0;
-    int clients[FD_SETSIZE];
+    int clients[maxClients];
     fd_set returnFileDescriptorSet;
     fd_set fileDescriptorSet;
     
@@ -50,29 +50,66 @@ void server (int port, int maxClients)
     clientIndex = EMPTY;
     
     // Initialize the array of clients
-    for (count = 0; count < FD_SETSIZE; count++)
+    for (index = 0; index < maxClients; index++)
     {
-        clients[count] = EMPTY;
+        clients[index] = EMPTY;
     }
     FD_ZERO(&fileDescriptorSet);
     FD_SET(listenSocket, &fileDescriptorSet);
     
     while (TRUE)
     {
-        fileDescriptorSet = fileDescriptorSet;
-        selectReady = select(maxFileDescriptor + 1, &returnFileDescriptorSet,
+        returnFileDescriptorSet = fileDescriptorSet;
+        selectReturn = select(maxFileDescriptor + 1, &returnFileDescriptorSet,
                                 NULL, NULL, NULL);
         // Check for a new client connection
         if (FD_ISSET(listenSocket, &returnFileDescriptorSet))
         {
-            if (acceptConnection(&listenSocket) == -1)
+            if ((clientSocket = acceptConnection(&listenSocket)) == -1)
             {
                 systemFatal("Unable To Accept Connection");
+            }
+            for (index = 0; index < maxClients; index++)
+            {
+                if (clients[index] < 0)
+                {
+                    clients[index] = clientSocket;
+                    break;
+                }
+            }
+            
+            if (index == maxClients)
+            {
+                /* Unable to accept another client, should display error, but
+                 * there is no need to shut down. */
+                // See if we need to check clients for data
+                if (--selectReturn <= 0)
+                {
+                    continue;
+                }
+            }
+            else
+            {
+                // Add new client to file descriptor set and adjust variables
+                FD_SET (clientSocket, &fileDescriptorSet);
+                if (clientSocket > maxFileDescriptor)
+                {
+                    maxFileDescriptor = clientSocket;
+                }
+                if (index > clientIndex)
+                {
+                    clientIndex = index;
+                }
+                // See if we need to check clients for data
+                if (--selectReturn <= 0)
+                {
+                    continue;
+                }
             }
         }
         
         // Check for data from clients
-        for (count = 0; count <= clientIndex; count++)
+        for (index = 0; index <= clientIndex; index++)
         {
         
         }

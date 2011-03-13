@@ -9,8 +9,9 @@ int tcpSocket()
 
 int setReuse(int *socket)
 {
-    int arg = 1;
-    return setsockopt(*socket, SOL_SOCKET, SO_REUSEADDR, &arg, sizeof(arg));
+    socklen_t optlen = 1;
+    return setsockopt(*socket, SOL_SOCKET, SO_REUSEADDR, &optlen, 
+                        sizeof(optlen));
 }
 
 int bindAddress(int *port, int *socket)
@@ -33,6 +34,6 @@ int setListen(int *socket)
 int acceptConnection(int *listenSocket)
 {
     struct sockaddr_in clientAddress;
-    int arg = sizeof(clientAddress);
-    return accept(*listenSocket, (struct sockaddr *) &clientAddress, &arg);
+    socklen_t addrlen = sizeof(clientAddress);
+    return accept(*listenSocket, (struct sockaddr *) &clientAddress, &addrlen);
 }
