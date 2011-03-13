@@ -4,7 +4,7 @@
 -- PROGRAM: Pelican Chat Program
 --
 -- FUNCTIONS:
--- void server(int port, int maxClients);
+-- void server (int port, int maxClients);
 --
 -- DATE: March 12, 2011
 --
@@ -18,17 +18,14 @@
 --
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-
+#include "server.h"
 #include "../network/network.h"
 
 #define FREE -1
 #define TRUE 1
 
-void server (int port, int maxClients);
-void initializeServer(int *listenSocket, int *port);
-static void systemFatal(const char*);
+void initializeServer (int *listenSocket, int *port);
+static void systemFatal (const char*);
 
 void server (int port, int maxClients)
 {

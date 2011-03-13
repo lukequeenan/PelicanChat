@@ -22,6 +22,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "server.h"
+
 #define DEFAULT_PORT 8929
 
 int main(int argc, char **argv);
@@ -71,10 +73,10 @@ int main (int argc, char **argv)
                 exit(1);
         }
     }
-    
+
     // Start server
-    
-    
+    server(port, maxClients);
+
     return 0;
 }
 
