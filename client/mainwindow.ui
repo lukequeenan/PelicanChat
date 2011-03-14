@@ -30,7 +30,14 @@
     <addaction name="action_Join_Server"/>
     <addaction name="action_Leave_Server"/>
    </widget>
+   <widget class="QMenu" name="menu_Options">
+    <property name="title">
+     <string>&amp;Options</string>
+    </property>
+    <addaction name="action_Record_to_File"/>
+   </widget>
    <addaction name="menuPelican_Chat"/>
+   <addaction name="menu_Options"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -49,6 +56,14 @@
   <action name="action_Leave_Server">
    <property name="text">
     <string>&amp;Leave Server</string>
+   </property>
+  </action>
+  <action name="action_Record_to_File">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Record to File</string>
    </property>
   </action>
  </widget>

@@ -23,6 +23,7 @@ private:
     JoinServer joinServer_;
 
 private slots:
+    void on_action_Record_to_File_toggled(bool );
     void on_action_Leave_Server_triggered();
     void on_action_Join_Server_triggered();
 };

@@ -124,3 +124,27 @@ void MainWindow::on_action_Leave_Server_triggered()
 {
     // Disconnect from server
 }
+
+/*
+-- FUNCTION: on_action_Record_to_File_toggled
+--
+-- DATE: March 13, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Luke Queenan
+--
+-- PROGRAMMER: Luke Queenan
+--
+-- INTERFACE: void MainWindow::on_action_Record_to_File_toggled(bool );
+--
+-- RETURNS: void
+--
+-- NOTES:
+-- This is the event that is triggered when the menu item for saving messages is
+-- activated. When this is true, messages must be recorded to a log file.
+*/
+void MainWindow::on_action_Record_to_File_toggled(bool )
+{
+    // Start recording messages to the log file.
+}
