@@ -29,6 +29,9 @@
 #define FREE -1
 #define TRUE 1
 #define BUFFER_LENGTH 160
+#define JOIN_MESSAGE 1
+#define TEXT_MESSAGE 2
+#define REQUEST_LIST_MESSAGE 3
 
 void initializeServer (int *listenSocket, int *port);
 int processMessage(int clientIndex, int clients[], int numberOfClients);
@@ -203,6 +206,28 @@ int processMessage(int clientIndex, int clients[], int numberOfClients)
     {
         return -1;
     }
+    
+    // Check for type of message
+    switch ((int)buffer[0])
+    {
+    case JOIN_MESSAGE:
+        // Update client list
+        break;
+    case TEXT_MESSAGE:
+        // Pass the message on to other clients
+        break;
+    case REQUEST_LIST_MESSAGE:
+        // Send back the list of connect clients
+        break;
+    default:
+        // If the message type is not recognized, disconnect the client
+        return -1;
+    }
+    if ((int)buffer[0] == JOIN_MESSAGE)
+    {
+        // Update client list with IP and name
+    }
+    
     
     // Send message
     for (count = 0; count < numberOfClients; count++)
