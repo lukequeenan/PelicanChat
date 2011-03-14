@@ -59,5 +59,5 @@ void MainWindow::on_action_Join_Server_triggered()
 */
 void MainWindow::on_action_Leave_Server_triggered()
 {
-    // Disconnect from server here
+    // Disconnect from server
 }
