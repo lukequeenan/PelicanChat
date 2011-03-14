@@ -32,8 +32,9 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <unistd.h>
-#include <strings.h>
+#include <string.h>
 
 #include "network.h"
 
@@ -165,6 +166,36 @@ int acceptConnection(int *listenSocket)
     struct sockaddr_in clientAddress;
     socklen_t addrlen = sizeof(clientAddress);
     return accept(*listenSocket, (struct sockaddr *) &clientAddress, &addrlen);
+}
+
+/*
+-- FUNCTION: acceptConnectionIp
+--
+-- DATE: March 12, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Luke Queenan
+--
+-- PROGRAMMER: Luke Queenan
+--
+-- INTERFACE: int acceptConnectionIp(int *listenSocket, char *ip);
+--
+-- RETURNS: the new socket created for the connection
+--
+-- NOTES:
+-- This is the wrapper function for accepting a connection from the specified
+-- socket. If you need the client's ip address, you can pass a char* to the
+-- function. You must ensure that the length of the ip array is long enough.
+*/
+int acceptConnectionIp(int *listenSocket, char *ip)
+{
+    int sock = 0;
+    struct sockaddr_in clientAddress;
+    socklen_t addrlen = sizeof(clientAddress);
+    sock = accept(*listenSocket, (struct sockaddr *) &clientAddress, &addrlen);
+    strcpy(ip, inet_ntoa(clientAddress.sin_addr));
+    return sock;
 }
 
 /*
