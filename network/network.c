@@ -184,9 +184,10 @@ int acceptConnection(int *listenSocket)
 --
 -- NOTES:
 -- This is the wrapper function for reading data from a socket. The data is
--- stored in a char array. The function will continue to read until it has read the
--- number of bytes specified by bytesToRead. You MUST ensure that the sender has
--- sent the SAME number of bytes, or this function will block.
+-- stored in a char array. The function will continue to read until it has read
+-- the number of bytes specified by bytesToRead. You MUST ensure that the sender
+-- has sent the SAME number of bytes, or this function will block. This is due
+-- to the fact that we are using read() and not recv().
 */
 int readData(int *socket, char *buffer, int bytesToRead)
 {
@@ -215,7 +216,8 @@ int readData(int *socket, char *buffer, int bytesToRead)
 -- RETURNS: the bytes written to the specified socket
 --
 -- NOTES:
--- This is the wrapper function for sending a char buffer to a socket.
+-- This is the wrapper function for sending a char buffer to a socket using
+-- write.
 */
 int sendData(int *socket, char *buffer, int bytesToSend)
 {
