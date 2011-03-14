@@ -7,6 +7,7 @@
 -- void server (int port, int maxClients);
 -- void initializeServer (int *listenSocket, int *port);
 -- int processMessage(int clientIndex, int clients[], int numberOfClients);
+-- void displayConnectedClients(clientInfo connectedClients[], int clients);
 -- static void systemFatal (const char*);
 --
 -- DATE: March 12, 2011
@@ -306,6 +307,24 @@ void initializeServer(int *listenSocket, int *port)
     }
 }
 
+/*
+-- FUNCTION: displayConnectedClients
+--
+-- DATE: March 14, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Luke Queenan
+--
+-- PROGRAMMER: Luke Queenan
+--
+-- INTERFACE: void displayConnectedClients(clientInfo[], int);
+--
+-- RETURNS: void
+--
+-- NOTES:
+-- This function displays all connected clients to the screen.
+*/
 void displayConnectedClients(clientInfo connectedClients[], int clients)
 {
     int index = 0;
