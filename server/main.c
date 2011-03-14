@@ -47,7 +47,8 @@ int main(int argc, char **argv);
 -- This is the main entry point for the program. It allows the user to specify a
 -- port on the command line, otherwise it will use a default. After setting the
 -- port, from either the user or the default, the program calls the server
--- function.
+-- function. You are also able to specify the maximum number of clients you
+-- would like to support though command line arguments.
 */
 int main (int argc, char **argv)
 {

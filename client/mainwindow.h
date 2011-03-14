@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 
+#include "joinserver.h"
+#include "ui_joinserver.h"
+
 namespace Ui {
     class MainWindow;
 }
@@ -17,6 +20,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    JoinServer joinServer_;
+
+private slots:
+    void on_action_Join_Server_triggered();
 };
 
 #endif // MAINWINDOW_H
