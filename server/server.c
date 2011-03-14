@@ -23,6 +23,8 @@
 -- accepting new clients and passing on messages.
 */
 
+#include <string.h>
+
 #include "server.h"
 #include "../network/network.h"
 
@@ -32,6 +34,12 @@
 #define JOIN_MESSAGE 1
 #define TEXT_MESSAGE 2
 #define REQUEST_LIST_MESSAGE 3
+
+typedef struct
+{
+    char name[16];
+    char ip[16];
+} clientInfo;
 
 void initializeServer (int *listenSocket, int *port);
 int processMessage(int clientIndex, int clients[], int numberOfClients);
@@ -57,7 +65,7 @@ static void systemFatal (const char*);
 -- NOTES:
 -- This is the main function of the server application. It calls functions to
 -- setup the server, then enters an infinite loop waiting for connections or
--- messages from clients. The waiting is done with select2. When clients join
+-- messages from clients. The waiting is done with select. When clients join
 -- the server, they are added to the list of clients, and when messages are
 -- received, they are passed on to all the other clients in the list.
 */
@@ -70,6 +78,7 @@ void server (int port, int maxClients)
     int index = 0;
     int clientIndex = 0;
     int clients[maxClients];
+    clientInfo connectedClients[maxClients];
     fd_set availableFileDescriptors;
     fd_set fileDescriptorSet;
     
@@ -80,11 +89,14 @@ void server (int port, int maxClients)
     maxFileDescriptor = listenSocket;
     clientIndex = FREE;
     
-    // Initialize the array of clients
+    // Initialize the array of clients and client info
     for (index = 0; index < maxClients; index++)
     {
         clients[index] = FREE;
+        strcpy(connectedClients[index].name, "N/A\0");
+        strcpy(connectedClients[index].ip, "000.000.000.000\0");
     }
+
     FD_ZERO(&fileDescriptorSet);
     FD_SET(listenSocket, &fileDescriptorSet);
     
@@ -211,7 +223,7 @@ int processMessage(int clientIndex, int clients[], int numberOfClients)
     switch ((int)buffer[0])
     {
     case JOIN_MESSAGE:
-        // Update client list
+        // Update client list with name
         break;
     case TEXT_MESSAGE:
         // Pass the message on to other clients
@@ -223,11 +235,6 @@ int processMessage(int clientIndex, int clients[], int numberOfClients)
         // If the message type is not recognized, disconnect the client
         return -1;
     }
-    if ((int)buffer[0] == JOIN_MESSAGE)
-    {
-        // Update client list with IP and name
-    }
-    
     
     // Send message
     for (count = 0; count < numberOfClients; count++)
