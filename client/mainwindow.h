@@ -23,6 +23,10 @@ private:
     Ui::MainWindow *ui;
     JoinServer joinServer_;
     QLabel *statusBarText_;
+
+    // Connection information
+    int mySocket_;
+
     void setStatusBarText(const QString text);
 
 private slots:

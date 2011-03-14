@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::JoinServer *ui;
+
+private slots:
+    void on_buttonBox_accepted();
 };
 
 #endif // JOINSERVER_H

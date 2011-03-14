@@ -69,3 +69,8 @@ JoinServer::~JoinServer()
 {
     delete ui;
 }
+
+void JoinServer::on_buttonBox_accepted()
+{
+
+}

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
-    <height>135</height>
+    <width>262</width>
+    <height>150</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,9 +30,27 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="lineEditIp"/>
+      <widget class="QLineEdit" name="lineEditIp">
+       <property name="inputMask">
+        <string>000.000.000.000; </string>
+       </property>
+      </widget>
      </item>
      <item row="1" column="0">
+      <widget class="QLabel" name="labelPort">
+       <property name="text">
+        <string>Port</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="lineEditPort">
+       <property name="maxLength">
+        <number>5</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
       <widget class="QLabel" name="labelName">
        <property name="text">
         <string>Name</string>
@@ -40,6 +58,9 @@
       </widget>
      </item>
      <item row="2" column="1">
+      <widget class="QLineEdit" name="lineEditName"/>
+     </item>
+     <item row="3" column="1">
       <widget class="QDialogButtonBox" name="buttonBox">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -48,9 +69,6 @@
         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
       </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEditName"/>
      </item>
     </layout>
    </item>
