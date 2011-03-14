@@ -5,6 +5,9 @@
 --
 -- FUNCTIONS:
 -- void server (int port, int maxClients);
+-- void initializeServer (int *listenSocket, int *port);
+-- int processMessage(int clientIndex, int clients[], int numberOfClients);
+-- static void systemFatal (const char*);
 --
 -- DATE: March 12, 2011
 --
@@ -15,7 +18,9 @@
 -- PROGRAMMER: Luke Queenan
 --
 -- NOTES:
---
+-- This file contains the server functionality of the program. This includes
+-- the list of connected clients, all open connections, and the logic of
+-- accepting new clients and passing on messages.
 */
 
 #include "server.h"
@@ -29,6 +34,30 @@ void initializeServer (int *listenSocket, int *port);
 int processMessage(int clientIndex, int clients[], int numberOfClients);
 static void systemFatal (const char*);
 
+/*
+-- FUNCTION: server
+--
+-- DATE: March 12, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Luke Queenan
+--           Richard Stevens
+--           Aman Abdulla
+--
+-- PROGRAMMER: Luke Queenan
+--
+-- INTERFACE: void server (int port, int maxClients);
+--
+-- RETURNS: void
+--
+-- NOTES:
+-- This is the main function of the server application. It calls functions to
+-- setup the server, then enters an infinite loop waiting for connections or
+-- messages from clients. The waiting is done with select2. When clients join
+-- the server, they are added to the list of clients, and when messages are
+-- received, they are passed on to all the other clients in the list.
+*/
 void server (int port, int maxClients)
 {
     int listenSocket = 0;
@@ -139,6 +168,27 @@ void server (int port, int maxClients)
     }
 }
 
+/*
+-- FUNCTION: initializeServer
+--
+-- DATE: March 13, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Luke Queenan
+--
+-- PROGRAMMER: Luke Queenan
+--
+-- INTERFACE: int processMessage(int, int*, int);
+--
+-- RETURNS: -1 if the client disconnected or 1 if successful
+--
+-- NOTES:
+-- This function is called when one of the clients has a message to send out
+-- through the server. The message is retrieved from the client and sent out to
+-- all other connected clients. If the client disconnected, the function returns
+-- -1, otherwise 1 after the message has been passed on.
+*/
 int processMessage(int clientIndex, int clients[], int numberOfClients)
 {
     char *buffer = (char*)malloc(sizeof(char) * BUFFER_LENGTH);
@@ -166,6 +216,26 @@ int processMessage(int clientIndex, int clients[], int numberOfClients)
     return 1;
 }
 
+/*
+-- FUNCTION: initializeServer
+--
+-- DATE: March 12, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Luke Queenan
+--
+-- PROGRAMMER: Luke Queenan
+--
+-- INTERFACE: void initializeServer(int *listenSocket, int *port);
+--
+-- RETURNS: void
+--
+-- NOTES:
+-- This function sets up the required server connections, such as creating a
+-- socket, setting the socket to reuse mode, binding it to an address, and
+-- setting it to listen.
+*/
 void initializeServer(int *listenSocket, int *port)
 {
     // Create a TCP socket
@@ -193,6 +263,24 @@ void initializeServer(int *listenSocket, int *port)
     }
 }
 
+/*
+-- FUNCTION: systemFatal
+--
+-- DATE: March 12, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Aman Abdulla
+--
+-- PROGRAMMER: Luke Queenan
+--
+-- INTERFACE: static void systemFatal(const char* message);
+--
+-- RETURNS: void
+--
+-- NOTES:
+-- This function displays an error message and shuts down the program.
+*/
 static void systemFatal(const char* message)
 {
     perror(message);
