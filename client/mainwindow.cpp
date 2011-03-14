@@ -52,6 +52,9 @@ MainWindow::MainWindow(QWidget *parent) :
         ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    statusBarText_ = new QLabel(this);
+    statusBar()->addWidget(statusBarText_);
+    setStatusBarText("Status: Disconnected");
 }
 
 /*
@@ -99,6 +102,8 @@ MainWindow::~MainWindow()
 void MainWindow::on_action_Join_Server_triggered()
 {
     joinServer_.show();
+    // Temporary message
+    setStatusBarText("Status: Connected to 000.000.000.000");
 }
 
 /*
@@ -123,6 +128,7 @@ void MainWindow::on_action_Join_Server_triggered()
 void MainWindow::on_action_Leave_Server_triggered()
 {
     // Disconnect from server
+    setStatusBarText("Status: Disconnected");
 }
 
 /*
@@ -142,9 +148,33 @@ void MainWindow::on_action_Leave_Server_triggered()
 --
 -- NOTES:
 -- This is the event that is triggered when the menu item for saving messages is
--- activated. When this is true, messages must be recorded to a log file.
+-- activated. When this is true, new messages must be recorded to a log file
+-- until the switch is toggled off.
 */
 void MainWindow::on_action_Record_to_File_toggled(bool )
 {
     // Start recording messages to the log file.
+}
+
+/*
+-- FUNCTION: setStatusBarText
+--
+-- DATE: March 14, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Luke Queenan
+--
+-- PROGRAMMER: Luke Queenan
+--
+-- INTERFACE: void MainWindow::setStatusBarText(const QString text)
+--
+-- RETURNS: void
+--
+-- NOTES:
+-- This function will set the text on the status bar to the provided string.
+*/
+void MainWindow::setStatusBarText(const QString text)
+{
+    statusBarText_->setText(text);
 }

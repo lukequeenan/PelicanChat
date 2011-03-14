@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QStatusBar>
 
 #include "joinserver.h"
 #include "ui_joinserver.h"
@@ -21,6 +22,8 @@ public:
 private:
     Ui::MainWindow *ui;
     JoinServer joinServer_;
+    QLabel *statusBarText_;
+    void setStatusBarText(const QString text);
 
 private slots:
     void on_action_Record_to_File_toggled(bool );
