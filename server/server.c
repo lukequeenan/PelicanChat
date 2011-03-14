@@ -42,7 +42,9 @@ typedef struct
 } clientInfo;
 
 void initializeServer (int *listenSocket, int *port);
-int processMessage(int clientIndex, int clients[], int numberOfClients);
+int processMessage(int clientIndex, int clients[], int numberOfClients,
+                    clientInfo connectedClients[]);
+void displayConnectedClients(clientInfo connectedClients[], int clients);
 static void systemFatal (const char*);
 
 /*
@@ -78,6 +80,7 @@ void server (int port, int maxClients)
     int index = 0;
     int clientIndex = 0;
     int clients[maxClients];
+    char ip[16];
     clientInfo connectedClients[maxClients];
     fd_set availableFileDescriptors;
     fd_set fileDescriptorSet;
@@ -94,7 +97,7 @@ void server (int port, int maxClients)
     {
         clients[index] = FREE;
         strcpy(connectedClients[index].name, "N/A\0");
-        strcpy(connectedClients[index].ip, "000.000.000.000\0");
+        strcpy(connectedClients[index].ip, "\0");
     }
 
     FD_ZERO(&fileDescriptorSet);
@@ -108,7 +111,7 @@ void server (int port, int maxClients)
         // Check for a new client connection
         if (FD_ISSET(listenSocket, &availableFileDescriptors))
         {
-            if ((clientSocket = acceptConnection(&listenSocket)) == -1)
+            if ((clientSocket = acceptConnectionIp(&listenSocket, ip)) == -1)
             {
                 systemFatal("Unable To Accept Connection");
             }
@@ -117,6 +120,7 @@ void server (int port, int maxClients)
                 if (clients[index] < 0)
                 {
                     clients[index] = clientSocket;
+                    strcpy(connectedClients[index].ip, ip);
                     break;
                 }
             }
@@ -163,7 +167,8 @@ void server (int port, int maxClients)
             // Check to see if the this is the right client
             if (FD_ISSET(clientSocket, &availableFileDescriptors))
             {
-                if (processMessage(index, &clients[0], clientIndex) == -1)
+                if (processMessage(index, &clients[0], clientIndex,
+                    &connectedClients[0]) == -1)
                 {
                     if (closeSocket(&clientSocket) == -1)
                     {
@@ -194,7 +199,7 @@ void server (int port, int maxClients)
 --
 -- PROGRAMMER: Luke Queenan
 --
--- INTERFACE: int processMessage(int, int*, int);
+-- INTERFACE: int processMessage(int, int*, int, clientInfo[]);
 --
 -- RETURNS: -1 if the client disconnected or 1 if successful
 --
@@ -204,7 +209,8 @@ void server (int port, int maxClients)
 -- all other connected clients. If the client disconnected, the function returns
 -- -1, otherwise 1 after the message has been passed on.
 */
-int processMessage(int clientIndex, int clients[], int numberOfClients)
+int processMessage(int clientIndex, int clients[], int numberOfClients,
+                    clientInfo connectedClients[])
 {
     char *buffer = (char*)malloc(sizeof(char) * BUFFER_LENGTH);
     int bytesRead = 0;
@@ -216,35 +222,40 @@ int processMessage(int clientIndex, int clients[], int numberOfClients)
     // Check if client disconnected
     if (bytesRead == 0)
     {
+        connectedClients[clientIndex].ip[0] = '\0';
+        displayConnectedClients(&connectedClients[0], numberOfClients);
+        free(buffer);
         return -1;
     }
     
-    // Check for type of message
-    switch ((int)buffer[0])
+    // Check for type of message, cast to get ascii value
+    switch (buffer[0])
     {
     case JOIN_MESSAGE:
-        // Update client list with name
+        // Update client list with client's name and display it
+        strcpy(connectedClients[clientIndex].name, buffer + 1);
+        displayConnectedClients(&connectedClients[0], numberOfClients);
         break;
     case TEXT_MESSAGE:
         // Pass the message on to other clients
+        for (count = 0; count < numberOfClients; count++)
+        {
+            if (clients[count] > 0 && clients[count] != clients[clientIndex])
+            {
+                sendData(&(clients[count]), &(*buffer), BUFFER_LENGTH);
+            }
+        }
         break;
     case REQUEST_LIST_MESSAGE:
         // Send back the list of connect clients
         break;
     default:
         // If the message type is not recognized, disconnect the client
+        free(buffer);
         return -1;
     }
     
-    // Send message
-    for (count = 0; count < numberOfClients; count++)
-    {
-        if (clients[count] > 0 && clients[count] != clients[clientIndex])
-        {
-            sendData(&(clients[count]), &(*buffer), BUFFER_LENGTH);
-        }
-    }
-
+    free(buffer);
     return 1;
 }
 
@@ -293,6 +304,27 @@ void initializeServer(int *listenSocket, int *port)
     {
         systemFatal("Cannot Listen On Socket");
     }
+}
+
+void displayConnectedClients(clientInfo connectedClients[], int clients)
+{
+    int index = 0;
+    char *name = (char*)malloc(sizeof(char) * 16);
+    char *ip = (char*)malloc(sizeof(char) * 16);
+    
+    printf("Client Name       IP Address\n");
+    for (index = 0; index < clients; index++)
+    {
+        if (connectedClients[index].ip[0] != '\0')
+        {
+            strcpy(name, connectedClients[index].name);
+            strcpy(ip, connectedClients[index].ip);
+            printf("%18s%s\n", name, ip);
+        }
+    }
+    
+    free(name);
+    free(ip);
 }
 
 /*
