@@ -12,9 +12,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    ../network/network.c
+    ../network/network.c \
+    joinserver.cpp
 
 HEADERS  += mainwindow.h \
-    ../network/network.h
+    ../network/network.h \
+    joinserver.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    joinserver.ui
