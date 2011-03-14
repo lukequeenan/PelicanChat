@@ -13,7 +13,7 @@ clean:
 network.o: $(NETWORKPATH)network.c $(NETWORKPATH)network.h
 	$(CC) $(CFLAGS) -O -c $(NETWORKPATH)network.c
 
-server.o: server.c
+server.o: server.c server.h
 	$(CC) $(CFLAGS) -O -c server.c
 
 main.o: main.c
