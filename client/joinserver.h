@@ -15,11 +15,14 @@ public:
     explicit JoinServer(QWidget *parent = 0);
     ~JoinServer();
 
+    // Getters for input boxes
+    QString getIp();
+    int getPort();
+    QString getName();
+
 private:
     Ui::JoinServer *ui;
-
-private slots:
-    void on_buttonBox_accepted();
+    int test;
 };
 
 #endif // JOINSERVER_H

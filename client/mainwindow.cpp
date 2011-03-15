@@ -101,9 +101,15 @@ MainWindow::~MainWindow()
 */
 void MainWindow::on_action_Join_Server_triggered()
 {
-    joinServer_.show();
+    if (joinServer_.exec() == QDialog::Accepted)
+    {
+        serverIp_ = joinServer_.getIp();
+        serverPort_ = joinServer_.getPort();
+        myName_ = joinServer_.getName();
+        // Attempt to connect to server here.
+    }
     // Temporary message
-    setStatusBarText("Status: Connected to 000.000.000.000");
+    //setStatusBarText("Status: Connected to 000.000.000.000");
 }
 
 /*
@@ -178,3 +184,4 @@ void MainWindow::setStatusBarText(const QString text)
 {
     statusBarText_->setText(text);
 }
+

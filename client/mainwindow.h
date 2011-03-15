@@ -25,6 +25,9 @@ private:
     QLabel *statusBarText_;
 
     // Connection information
+    int serverPort_;
+    QString serverIp_;
+    QString myName_;
     int mySocket_;
 
     void setStatusBarText(const QString text);

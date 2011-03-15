@@ -70,7 +70,17 @@ JoinServer::~JoinServer()
     delete ui;
 }
 
-void JoinServer::on_buttonBox_accepted()
+QString JoinServer::getIp()
 {
+    return ui->lineEditIp->text();
+}
 
+int JoinServer::getPort()
+{
+    return ui->lineEditPort->text().toInt();
+}
+
+QString JoinServer::getName()
+{
+    return ui->lineEditName->text();
 }
