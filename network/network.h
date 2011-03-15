@@ -12,7 +12,7 @@ int setListen(int *socket);
 int acceptConnection(int *listenSocket);
 int acceptConnectionIp(int *listenSocket, char* ip);
 int readData(int *socket, char *buffer, int bytesToRead);
-int sendData(int *socket, char *buffer, int bytesToSend);
+int sendData(int *socket, const char *buffer, int bytesToSend);
 int closeSocket(int *socket);
 int connectToServer(int *port, int *socket, const char *ip);
 #ifdef __cplusplus

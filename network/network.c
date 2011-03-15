@@ -243,7 +243,7 @@ int readData(int *socket, char *buffer, int bytesToRead)
 --
 -- PROGRAMMER: Luke Queenan
 --
--- INTERFACE: int sendData(int *socket, char *buffer, int bytesToSend);
+-- INTERFACE: int sendData(int *socket, const char *buffer, int bytesToSend);
 --
 -- RETURNS: the bytes written to the specified socket
 --
@@ -251,7 +251,7 @@ int readData(int *socket, char *buffer, int bytesToRead)
 -- This is the wrapper function for sending a char buffer to a socket using
 -- write.
 */
-int sendData(int *socket, char *buffer, int bytesToSend)
+int sendData(int *socket, const char *buffer, int bytesToSend)
 {
     return write(*socket, buffer, bytesToSend);
 }
