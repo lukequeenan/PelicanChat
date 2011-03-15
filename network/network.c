@@ -32,6 +32,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
+#include <netdb.h>
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
@@ -278,3 +279,37 @@ int closeSocket(int *socket)
     return close(*socket);
 }
 
+/*
+-- FUNCTION: connectToServer
+--
+-- DATE: March 14, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Luke Queenan
+--
+-- PROGRAMMER: Luke Queenan
+--
+-- INTERFACE: int connectToServer(int *port, int *socket, char *ip);
+--
+-- RETURNS: the result of the connect function or gethostbyname if it fails
+--
+-- NOTES:
+-- This is the wrapper function for connecting to a server.
+*/
+int connectToServer(int *port, int *socket, char *ip)
+{
+    struct sockaddr_in address;
+    struct hostent *hp;
+
+    bzero((char *)&address, sizeof(struct sockaddr_in));
+    address.sin_family = AF_INET;
+    address.sin_port = htons(*port);
+    if ((hp = gethostbyname(&(*ip))) == NULL)
+    {
+        return -1;
+    }
+    bcopy(hp->h_addr, (char *)&address.sin_addr, hp->h_length);
+
+    return connect(*socket, (struct sockaddr *)&address, sizeof(address));
+}

@@ -14,6 +14,7 @@ int acceptConnectionIp(int *listenSocket, char* ip);
 int readData(int *socket, char *buffer, int bytesToRead);
 int sendData(int *socket, char *buffer, int bytesToSend);
 int closeSocket(int *socket);
+int connectToServer(int *port, int *socket, char *ip);
 #ifdef __cplusplus
 }
 #endif
