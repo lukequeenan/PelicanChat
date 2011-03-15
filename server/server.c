@@ -219,15 +219,6 @@ int processMessage(int clientIndex, int clients[], int numberOfClients,
     // Read message
     bytesRead = readData(&(clients[clientIndex]), &(*buffer), BUFFER_LENGTH);
     
-    // Check if client disconnected
-    if (bytesRead == 0)
-    {
-        connectedClients[clientIndex].ip[0] = '\0';
-        displayConnectedClients(&connectedClients[0], numberOfClients);
-        free(buffer);
-        return -1;
-    }
-    
     // Check for type of message, cast to get ascii value
     switch (buffer[0])
     {
@@ -250,7 +241,9 @@ int processMessage(int clientIndex, int clients[], int numberOfClients,
         // Send back the list of connect clients
         break;
     default:
-        // If the message type is not recognized, disconnect the client
+        // If the message type is empty or not recognized, disconnect the client
+        connectedClients[clientIndex].ip[0] = '\0';
+        displayConnectedClients(&connectedClients[0], numberOfClients);
         free(buffer);
         return -1;
     }
