@@ -33,6 +33,9 @@
       <height>61</height>
      </rect>
     </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButtonSend">
     <property name="geometry">
