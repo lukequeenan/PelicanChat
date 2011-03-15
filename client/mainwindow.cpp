@@ -110,6 +110,10 @@ void MainWindow::on_action_Join_Server_triggered()
         {
             setStatusBarText("Status: Connected to " + serverIp_);
         }
+        else
+        {
+            setStatusBarText("Status: Unable to connect");
+        }
     }
 }
 
@@ -180,7 +184,7 @@ void MainWindow::on_action_Record_to_File_toggled(bool )
 --
 -- PROGRAMMER: Luke Queenan
 --
--- INTERFACE: void MainWindow::setStatusBarText(const QString text)
+-- INTERFACE: void MainWindow::setStatusBarText(const QString text);
 --
 -- RETURNS: void
 --
@@ -192,6 +196,25 @@ void MainWindow::setStatusBarText(const QString text)
     statusBarText_->setText(text);
 }
 
+/*
+-- FUNCTION: initializeConnectionToServer
+--
+-- DATE: March 14, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Luke Queenan
+--
+-- PROGRAMMER: Luke Queenan
+--
+-- INTERFACE: bool MainWindow::initializeConnectionToServer();
+--
+-- RETURNS: true if the connection was established, false otherwise
+--
+-- NOTES:
+-- This function will set up the connection to the server and send out the
+-- clients name to the server in a control message.
+*/
 bool MainWindow::initializeConnectionToServer()
 {
     if ((mySocket_ = tcpSocket()) == -1)
@@ -200,6 +223,11 @@ bool MainWindow::initializeConnectionToServer()
     }
     const char *text = serverIp_.toLatin1();
     if ((connectToServer(&serverPort_, &mySocket_, &(*text))) == -1)
+    {
+        return false;
+    }
+    text = (char)JOIN_MESSAGE + myName_.toLatin1();
+    if (!sendData(&mySocket_, &(*text), BUFFER_LENGTH))
     {
         return false;
     }

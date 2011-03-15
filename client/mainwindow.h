@@ -7,6 +7,11 @@
 #include "joinserver.h"
 #include "ui_joinserver.h"
 
+#define BUFFER_LENGTH 160
+#define JOIN_MESSAGE 1
+#define TEXT_MESSAGE 2
+#define REQUEST_LIST_MESSAGE 3
+
 namespace Ui {
     class MainWindow;
 }
