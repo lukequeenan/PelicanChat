@@ -233,4 +233,3 @@ bool MainWindow::initializeConnectionToServer()
     }
     return true;
 }
-
