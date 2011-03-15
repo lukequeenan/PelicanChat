@@ -178,12 +178,11 @@ void server (int port, int maxClients)
                     FD_CLR(clientSocket, &fileDescriptorSet);
                     clients[clientIndex] = FREE;
                 }
-            }
-            
-            // See if there are any more clients to check
-            if (--selectReturn <= 0)
-            {
-                break;
+                // See if there are any more clients to check
+                if (--selectReturn <= 0)
+                {
+                    break;
+                }
             }
         }
     }
@@ -338,7 +337,7 @@ void displayConnectedClients(clientInfo connectedClients[], int clients)
         {
             strcpy(name, connectedClients[index].name);
             strcpy(ip, connectedClients[index].ip);
-            printf("%18s%s\n", name, ip);
+            printf("%-18s%s\n", name, ip);
         }
     }
     
