@@ -134,8 +134,14 @@ void MainWindow::on_action_Join_Server_triggered()
 */
 void MainWindow::on_action_Leave_Server_triggered()
 {
-    // Disconnect from server
-    setStatusBarText("Status: Disconnected");
+    if (closeSocket(&mySocket_) == -1)
+    {
+        setStatusBarText("Status: Unable to disconnect");
+    }
+    else
+    {
+        setStatusBarText("Status: Disconnected");
+    }
 }
 
 /*
