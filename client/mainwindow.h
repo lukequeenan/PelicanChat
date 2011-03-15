@@ -24,13 +24,15 @@ private:
     JoinServer joinServer_;
     QLabel *statusBarText_;
 
-    // Connection information
+    // Connection data members
     int serverPort_;
     QString serverIp_;
     QString myName_;
     int mySocket_;
 
+    // Private functions
     void setStatusBarText(const QString text);
+    bool initializeConnectionToServer();
 
 private slots:
     void on_action_Record_to_File_toggled(bool );

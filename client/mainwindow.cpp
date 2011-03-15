@@ -106,10 +106,11 @@ void MainWindow::on_action_Join_Server_triggered()
         serverIp_ = joinServer_.getIp();
         serverPort_ = joinServer_.getPort();
         myName_ = joinServer_.getName();
-        // Attempt to connect to server here.
+        if (initializeConnectionToServer())
+        {
+            setStatusBarText("Status: Connected to " + serverIp_);
+        }
     }
-    // Temporary message
-    //setStatusBarText("Status: Connected to 000.000.000.000");
 }
 
 /*
@@ -183,5 +184,19 @@ void MainWindow::on_action_Record_to_File_toggled(bool )
 void MainWindow::setStatusBarText(const QString text)
 {
     statusBarText_->setText(text);
+}
+
+bool MainWindow::initializeConnectionToServer()
+{
+    if ((mySocket_ = tcpSocket()) == -1)
+    {
+        return false;
+    }
+//    const char *text = serverIp_.toLatin1();
+//    if ((connectToServer(&serverPort_, &mySocket_, &)) == -1)
+//    {
+//        return false;
+//    }
+    return true;
 }
 
