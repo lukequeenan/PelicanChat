@@ -192,11 +192,11 @@ bool MainWindow::initializeConnectionToServer()
     {
         return false;
     }
-//    const char *text = serverIp_.toLatin1();
-//    if ((connectToServer(&serverPort_, &mySocket_, &)) == -1)
-//    {
-//        return false;
-//    }
+    const char *text = serverIp_.toLatin1();
+    if ((connectToServer(&serverPort_, &mySocket_, &(*text))) == -1)
+    {
+        return false;
+    }
     return true;
 }
 

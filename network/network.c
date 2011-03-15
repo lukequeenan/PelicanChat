@@ -297,7 +297,7 @@ int closeSocket(int *socket)
 -- NOTES:
 -- This is the wrapper function for connecting to a server.
 */
-int connectToServer(int *port, int *socket, char *ip)
+int connectToServer(int *port, int *socket, const char *ip)
 {
     struct sockaddr_in address;
     struct hostent *hp;
