@@ -116,7 +116,6 @@ void MainWindow::on_action_Join_Server_triggered()
         if (initializeConnectionToServer())
         {
             ui->sendBox->setReadOnly(false);
-            ui->pushButtonSend->setDisabled(false);
             setStatusBarText("Status: Connected to " + serverIp_);
         }
         else
@@ -265,9 +264,17 @@ bool MainWindow::initializeConnectionToServer()
 */
 void MainWindow::on_pushButtonSend_clicked()
 {
-    QString me = "Me: ";
     message_ = ui->sendBox->toPlainText();
-    me.append(message_);
-    ui->sendBox->clear();
-    ui->messageBox->append(me);
+    if(message_.size() > 0) {
+        QString me = "Me: ";
+        me.append(message_);
+        ui->sendBox->clear();
+        ui->messageBox->append(me);
+        ui->pushButtonSend->setDisabled(true);
+    }
+}
+
+void MainWindow::on_sendBox_textChanged()
+{
+    ui->pushButtonSend->setDisabled(false);
 }

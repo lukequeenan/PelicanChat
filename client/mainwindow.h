@@ -45,6 +45,7 @@ private slots:
     void on_action_Leave_Server_triggered();
     void on_action_Join_Server_triggered();
     void on_pushButtonSend_clicked();
+    void on_sendBox_textChanged();
 };
 
 #endif // MAINWINDOW_H
