@@ -274,6 +274,24 @@ void MainWindow::on_pushButtonSend_clicked()
     }
 }
 
+/*
+-- FUNCTION: on_sendBox_textChanged()
+--
+-- DATE: March 15, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Joel Stewart
+--
+-- PROGRAMMER: Joel Stewart
+--
+-- INTERFACE: void MainWindow::on_sendBox_textChanged();
+--
+-- RETURNS:
+--
+-- NOTES:
+-- ungrays send box when text changes on sendBox
+*/
 void MainWindow::on_sendBox_textChanged()
 {
     ui->pushButtonSend->setDisabled(false);
