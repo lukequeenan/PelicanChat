@@ -14,29 +14,6 @@
    <string>Pelican Chat</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTextBrowser" name="textBrowserDisplay">
-    <property name="geometry">
-     <rect>
-      <x>9</x>
-      <y>9</y>
-      <width>451</width>
-      <height>192</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPlainTextEdit" name="plainTextEditInput">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>210</y>
-      <width>341</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="horizontalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButtonSend">
     <property name="geometry">
      <rect>
@@ -50,6 +27,26 @@
      <string>Send</string>
     </property>
    </widget>
+   <widget class="QTextEdit" name="sendBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>210</y>
+      <width>341</width>
+      <height>61</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="messageBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>451</width>
+      <height>191</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -57,7 +54,7 @@
      <x>0</x>
      <y>0</y>
      <width>471</width>
-     <height>25</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPelican_Chat">

@@ -33,6 +33,7 @@ private:
     int serverPort_;
     QString serverIp_;
     QString myName_;
+    QString message_;
     int mySocket_;
 
     // Private functions
@@ -43,6 +44,7 @@ private slots:
     void on_action_Record_to_File_toggled(bool );
     void on_action_Leave_Server_triggered();
     void on_action_Join_Server_triggered();
+    void on_pushButtonSend_clicked();
 };
 
 #endif // MAINWINDOW_H
