@@ -55,6 +55,13 @@ MainWindow::MainWindow(QWidget *parent) :
     statusBarText_ = new QLabel(this);
     statusBar()->addWidget(statusBarText_);
     setStatusBarText("Status: Disconnected");
+    ui->sendBox->setReadOnly(true);
+    ui->messageBox->setReadOnly(true);
+    ui->pushButtonSend->setDisabled(true);
+
+    //modifies color of text and background
+    ui->messageBox->setStyleSheet("QTextEdit {background-color: red; color: black;}");
+    ui->sendBox->setStyleSheet("QTextEdit {background-color: red; color: black;}");
 }
 
 /*
@@ -108,6 +115,7 @@ void MainWindow::on_action_Join_Server_triggered()
         myName_ = joinServer_.getName();
         if (initializeConnectionToServer())
         {
+            ui->sendBox->setReadOnly(false);
             setStatusBarText("Status: Connected to " + serverIp_);
         }
         else
@@ -144,6 +152,8 @@ void MainWindow::on_action_Leave_Server_triggered()
     }
     else
     {
+        ui->sendBox->setReadOnly(true);
+        ui->pushButtonSend->setDisabled(true);
         setStatusBarText("Status: Disconnected");
     }
 }
@@ -232,4 +242,65 @@ bool MainWindow::initializeConnectionToServer()
         return false;
     }
     return true;
+}
+
+/*
+-- FUNCTION: on_sendButton_clicked()
+--
+-- DATE: March 15, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Joel Stewart
+--           Luke Queenan
+--
+-- PROGRAMMER: Joel Stewart
+--             Luke Queenan
+--
+-- INTERFACE: void MainWindow::on_sendButton_clicked();
+--
+-- RETURNS:
+--
+-- NOTES:
+-- Send button was clicked and adds message to logMessageBox
+*/
+void MainWindow::on_pushButtonSend_clicked()
+{
+    message_ = ui->sendBox->toPlainText();
+    const char *text = message_.toLatin1();
+    if(message_.size() > 0) {
+        text = (char)TEXT_MESSAGE + myName_.toLatin1() + ": ";
+        if (!sendData(&mySocket_, &(*text), BUFFER_LENGTH))
+        {
+            // Display error message here
+        }
+        QString me = "Me: ";
+        me.append(message_);
+        ui->sendBox->clear();
+        ui->messageBox->append(me);
+        ui->pushButtonSend->setDisabled(true);
+    }
+}
+
+/*
+-- FUNCTION: on_sendBox_textChanged()
+--
+-- DATE: March 15, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Joel Stewart
+--
+-- PROGRAMMER: Joel Stewart
+--
+-- INTERFACE: void MainWindow::on_sendBox_textChanged();
+--
+-- RETURNS:
+--
+-- NOTES:
+-- ungrays send box when text changes on sendBox
+*/
+void MainWindow::on_sendBox_textChanged()
+{
+    ui->pushButtonSend->setDisabled(false);
 }
