@@ -324,7 +324,7 @@ void displayConnectedClients(clientInfo connectedClients[], int clients)
     char *ip = (char*)malloc(sizeof(char) * 16);
     
     printf("Client Name       IP Address\n");
-    for (index = 0; index < clients; index++)
+    for (index = 0; index <= clients; index++)
     {
         if (connectedClients[index].ip[0] != '\0')
         {
