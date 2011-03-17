@@ -252,8 +252,10 @@ bool MainWindow::initializeConnectionToServer()
 -- REVISIONS: (Date and Description)
 --
 -- DESIGNER: Joel Stewart
+--           Luke Queenan
 --
 -- PROGRAMMER: Joel Stewart
+--             Luke Queenan
 --
 -- INTERFACE: void MainWindow::on_sendButton_clicked();
 --
@@ -265,7 +267,13 @@ bool MainWindow::initializeConnectionToServer()
 void MainWindow::on_pushButtonSend_clicked()
 {
     message_ = ui->sendBox->toPlainText();
+    const char *text = message_.toLatin1();
     if(message_.size() > 0) {
+        text = (char)TEXT_MESSAGE + myName_.toLatin1() + ": ";
+        if (!sendData(&mySocket_, &(*text), BUFFER_LENGTH))
+        {
+            // Display error message here
+        }
         QString me = "Me: ";
         me.append(message_);
         ui->sendBox->clear();
