@@ -351,7 +351,7 @@ void MainWindow::on_sendBox_textChanged()
 */
 void MainWindow::writeFile(const char* data)
 {
-    QFile f( "f.txt" );
+    QFile f( "chatlog.txt" );
 
     if( !f.open( IO_WriteOnly | IO_Append ) )
     {
