@@ -286,19 +286,34 @@ bool MainWindow::initializeConnectionToServer()
 void MainWindow::on_pushButtonSend_clicked()
 {
     message_ = ui->sendBox->toPlainText();
-    const char *text;// = message_.toLatin1();
+    const char *text;
     if(message_.size() > 0) {
-        text = (char)TEXT_MESSAGE + myName_.toLatin1() + ": " +
-               message_.toLatin1();
-        if (!sendData(&mySocket_, &(*text), BUFFER_LENGTH))
-        {
-            // Display error message here
-        }
+        // Process message to screen
         QString me = "Me: ";
         me.append(message_);
         ui->sendBox->clear();
         ui->messageBox->append(me);
         ui->pushButtonSend->setDisabled(true);
+        // Get first message and send it
+        text = (char)TEXT_MESSAGE + myName_.toLatin1() + ": " +
+               message_.left(BUFFER_LENGTH - NAME_LENGTH - 2).toLatin1();
+        message_.remove(0, BUFFER_LENGTH - NAME_LENGTH - 2);
+        if (!sendData(&mySocket_, &(*text), BUFFER_LENGTH))
+        {
+            // Display error message here
+        }
+        // If the message is longer than one buffer, send the rest here
+        while (message_.size() != 0)
+        {
+            text = (char)TEXT_MESSAGE +
+                   message_.left(BUFFER_LENGTH - 1).toLatin1();
+            message_.remove(0, BUFFER_LENGTH - 1);
+            if (!sendData(&mySocket_, &(*text), BUFFER_LENGTH))
+            {
+                // Display error message here
+            }
+        }
+        // Append to the file
         if(append_info_)
         {
             QString data = "\n";

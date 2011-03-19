@@ -10,6 +10,7 @@
 #include "listenthread.h"
 
 #define BUFFER_LENGTH 160
+#define NAME_LENGTH 15
 #define JOIN_MESSAGE 1
 #define TEXT_MESSAGE 2
 #define REQUEST_LIST_MESSAGE 3
