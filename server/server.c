@@ -322,7 +322,10 @@ void displayConnectedClients(clientInfo connectedClients[], int clients)
     int index = 0;
     char *name = (char*)malloc(sizeof(char) * 16);
     char *ip = (char*)malloc(sizeof(char) * 16);
-    
+    if (system("clear") == -1)
+    {
+        systemFatal("Error in system call!");
+    }
     printf("Client Name       IP Address\n");
     for (index = 0; index <= clients; index++)
     {
