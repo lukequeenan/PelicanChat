@@ -26,6 +26,13 @@
 */
 
 #include "mainwindow.h"
+#include <qfile.h>
+#include <iostream>
+#define IO_ReadOnly QIODevice::ReadOnly
+#define IO_WriteOnly QIODevice::WriteOnly
+#define IO_ReadWrite QIODevice::ReadWrite
+#define IO_Append QIODevice::Append
+#include <qapplication.h>
 #include "ui_mainwindow.h"
 #include "../network/network.h"
 
@@ -51,6 +58,7 @@ MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent),
         ui(new Ui::MainWindow)
 {
+    append_info_ = false;
     ui->setupUi(this);
     statusBarText_ = new QLabel(this);
     statusBar()->addWidget(statusBarText_);
@@ -115,6 +123,7 @@ void MainWindow::on_action_Join_Server_triggered()
         myName_ = joinServer_.getName();
         if (initializeConnectionToServer())
         {
+            myThread.start();
             ui->sendBox->setReadOnly(false);
             setStatusBarText("Status: Connected to " + serverIp_);
         }
@@ -178,8 +187,9 @@ void MainWindow::on_action_Leave_Server_triggered()
 -- activated. When this is true, new messages must be recorded to a log file
 -- until the switch is toggled off.
 */
-void MainWindow::on_action_Record_to_File_toggled(bool )
+void MainWindow::on_action_Record_to_File_toggled(bool record)
 {
+    append_info_ = record;
     // Start recording messages to the log file.
 }
 
@@ -279,6 +289,48 @@ void MainWindow::on_pushButtonSend_clicked()
         ui->sendBox->clear();
         ui->messageBox->append(me);
         ui->pushButtonSend->setDisabled(true);
+        if(append_info_)
+        {
+            QString data = "\n";
+            data.append(me);
+            writeFile(qPrintable(data));
+        }
+    }
+}
+
+/*
+-- FUNCTION: listening_for_data()
+--
+-- DATE: March 18, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Joel Stewart
+--
+-- PROGRAMMER: Joel Stewart
+--
+-- INTERFACE: void* MainWindow::listening_for_data()
+--
+-- RETURNS:
+--
+-- NOTES:
+-- monitors socket for info
+*/
+void MainWindow::run()
+{
+    int bytesRead = 0;
+    qDebug("start");
+    char *buffer = (char*)malloc(sizeof(char) * BUFFER_LENGTH);
+    while(true) {
+        bytesRead = readData(&mySocket_, &(*buffer), BUFFER_LENGTH);
+        if(bytesRead > 0) {
+            QString data(buffer);
+            ui->messageBox->append(data);
+            if(append_info_) {
+                data.prepend("\n");
+                writeFile(qPrintable(data));
+            }
+        }
     }
 }
 
@@ -303,4 +355,36 @@ void MainWindow::on_pushButtonSend_clicked()
 void MainWindow::on_sendBox_textChanged()
 {
     ui->pushButtonSend->setDisabled(false);
+}
+
+/*
+-- FUNCTION: writeFile(const char* data)
+--
+-- DATE: March 18, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Joel Stewart
+--
+-- PROGRAMMER: Joel Stewart
+--
+-- INTERFACE: MainWindow::writeFile(const char* data)
+--
+-- RETURNS:
+--
+-- NOTES:
+-- Writes chat to file
+*/
+void MainWindow::writeFile(const char* data)
+{
+    QFile f( "f.txt" );
+
+    if( !f.open( IO_WriteOnly | IO_Append ) )
+    {
+      //error occured
+        qDebug("error");
+    }
+
+    f.write(data);
+    f.close();
 }

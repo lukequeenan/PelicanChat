@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QStatusBar>
+#include <QThread>
 
 #include "joinserver.h"
 #include "ui_joinserver.h"
@@ -19,9 +20,11 @@ namespace Ui {
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+    QThread myThread;
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    virtual void run();
     ~MainWindow();
 
 private:
@@ -31,6 +34,7 @@ private:
 
     // Connection data members
     int serverPort_;
+    bool append_info_;
     QString serverIp_;
     QString myName_;
     QString message_;
@@ -39,6 +43,7 @@ private:
     // Private functions
     void setStatusBarText(const QString text);
     bool initializeConnectionToServer();
+    void writeFile(const char* data);
 
 private slots:
     void on_action_Record_to_File_toggled(bool );
