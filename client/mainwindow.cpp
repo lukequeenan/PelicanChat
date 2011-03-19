@@ -28,13 +28,14 @@
 #include "mainwindow.h"
 #include <qfile.h>
 #include <iostream>
+#include <qapplication.h>
+#include "ui_mainwindow.h"
+#include "../network/network.h"
+
 #define IO_ReadOnly QIODevice::ReadOnly
 #define IO_WriteOnly QIODevice::WriteOnly
 #define IO_ReadWrite QIODevice::ReadWrite
 #define IO_Append QIODevice::Append
-#include <qapplication.h>
-#include "ui_mainwindow.h"
-#include "../network/network.h"
 
 /*
 -- FUNCTION: MainWindow
@@ -66,10 +67,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->sendBox->setReadOnly(true);
     ui->messageBox->setReadOnly(true);
     ui->pushButtonSend->setDisabled(true);
-
-    //modifies color of text and background
-    ui->messageBox->setStyleSheet("QTextEdit {background-color: red; color: black;}");
-    ui->sendBox->setStyleSheet("QTextEdit {background-color: red; color: black;}");
 }
 
 /*
@@ -123,7 +120,11 @@ void MainWindow::on_action_Join_Server_triggered()
         myName_ = joinServer_.getName();
         if (initializeConnectionToServer())
         {
-            myThread.start();
+            QObject::connect(&listenThread_,
+                             SIGNAL(textMessageReceived(QString)), this,
+                             SLOT(dataReceived(QString)));
+            listenThread_.setSocket(&mySocket_);
+            listenThread_.start();
             ui->sendBox->setReadOnly(false);
             setStatusBarText("Status: Connected to " + serverIp_);
         }
@@ -269,7 +270,7 @@ bool MainWindow::initializeConnectionToServer()
 --
 -- INTERFACE: void MainWindow::on_sendButton_clicked();
 --
--- RETURNS:
+-- RETURNS: void
 --
 -- NOTES:
 -- Send button was clicked and adds message to logMessageBox
@@ -277,9 +278,9 @@ bool MainWindow::initializeConnectionToServer()
 void MainWindow::on_pushButtonSend_clicked()
 {
     message_ = ui->sendBox->toPlainText();
-    const char *text = message_.toLatin1();
+    const char *text;// = message_.toLatin1();
     if(message_.size() > 0) {
-        text = (char)TEXT_MESSAGE + myName_.toLatin1() + ": ";
+        text = (char)TEXT_MESSAGE + myName_.toLatin1() + ": " + message_.toLatin1();
         if (!sendData(&mySocket_, &(*text), BUFFER_LENGTH))
         {
             // Display error message here
@@ -294,42 +295,6 @@ void MainWindow::on_pushButtonSend_clicked()
             QString data = "\n";
             data.append(me);
             writeFile(qPrintable(data));
-        }
-    }
-}
-
-/*
--- FUNCTION: listening_for_data()
---
--- DATE: March 18, 2011
---
--- REVISIONS: (Date and Description)
---
--- DESIGNER: Joel Stewart
---
--- PROGRAMMER: Joel Stewart
---
--- INTERFACE: void* MainWindow::listening_for_data()
---
--- RETURNS:
---
--- NOTES:
--- monitors socket for info
-*/
-void MainWindow::run()
-{
-    int bytesRead = 0;
-    qDebug("start");
-    char *buffer = (char*)malloc(sizeof(char) * BUFFER_LENGTH);
-    while(true) {
-        bytesRead = readData(&mySocket_, &(*buffer), BUFFER_LENGTH);
-        if(bytesRead > 0) {
-            QString data(buffer);
-            ui->messageBox->append(data);
-            if(append_info_) {
-                data.prepend("\n");
-                writeFile(qPrintable(data));
-            }
         }
     }
 }
@@ -350,7 +315,7 @@ void MainWindow::run()
 -- RETURNS:
 --
 -- NOTES:
--- ungrays send box when text changes on sendBox
+-- Enables send box when text changes on sendBox
 */
 void MainWindow::on_sendBox_textChanged()
 {
@@ -387,4 +352,32 @@ void MainWindow::writeFile(const char* data)
 
     f.write(data);
     f.close();
+}
+
+/*
+-- FUNCTION: dataReceived
+--
+-- DATE: March 19, 2011
+--
+-- REVISIONS: (Date and Description)
+--
+-- DESIGNER: Luke Queenan
+--
+-- PROGRAMMER: Luke Queenan
+--             Joel Stewart
+--
+-- INTERFACE: void MainWindow::dataReceived(QString data)
+--
+-- RETURNS: void
+--
+-- NOTES:
+-- Signal that is called from the listen thread when data is received.
+*/
+void MainWindow::dataReceived(QString data)
+{
+    ui->messageBox->append(data);
+    if(append_info_) {
+        data.prepend("\n");
+        writeFile(qPrintable(data));
+    }
 }

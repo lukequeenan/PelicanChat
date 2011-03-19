@@ -13,11 +13,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     ../network/network.c \
-    joinserver.cpp
+    joinserver.cpp \
+    listenthread.cpp
 
 HEADERS  += mainwindow.h \
     ../network/network.h \
-    joinserver.h
+    joinserver.h \
+    listenthread.h
 
 FORMS    += mainwindow.ui \
     joinserver.ui

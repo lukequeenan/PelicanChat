@@ -7,6 +7,7 @@
 
 #include "joinserver.h"
 #include "ui_joinserver.h"
+#include "listenthread.h"
 
 #define BUFFER_LENGTH 160
 #define JOIN_MESSAGE 1
@@ -20,12 +21,13 @@ namespace Ui {
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    QThread myThread;
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    virtual void run();
     ~MainWindow();
+
+public slots:
+    void dataReceived(QString data);
 
 private:
     Ui::MainWindow *ui;
@@ -39,11 +41,13 @@ private:
     QString myName_;
     QString message_;
     int mySocket_;
+    ListenThread listenThread_;
 
     // Private functions
     void setStatusBarText(const QString text);
     bool initializeConnectionToServer();
     void writeFile(const char* data);
+
 
 private slots:
     void on_action_Record_to_File_toggled(bool );
