@@ -219,7 +219,7 @@ int processMessage(int clientIndex, int clients[], int numberOfClients,
     // Read message
     bytesRead = readData(&(clients[clientIndex]), &(*buffer), BUFFER_LENGTH);
     
-    // Check for type of message, cast to get ascii value
+    // Check for type of message
     switch (buffer[0])
     {
     case JOIN_MESSAGE:
