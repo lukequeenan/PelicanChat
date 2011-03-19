@@ -60,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
         ui(new Ui::MainWindow)
 {
     append_info_ = false;
+    isConnected_ = false;
     ui->setupUi(this);
     statusBarText_ = new QLabel(this);
     statusBar()->addWidget(statusBarText_);
@@ -113,7 +114,7 @@ MainWindow::~MainWindow()
 */
 void MainWindow::on_action_Join_Server_triggered()
 {
-    if (joinServer_.exec() == QDialog::Accepted)
+    if (!isConnected_ && (joinServer_.exec() == QDialog::Accepted))
     {
         serverIp_ = joinServer_.getIp();
         serverPort_ = joinServer_.getPort();
@@ -127,6 +128,7 @@ void MainWindow::on_action_Join_Server_triggered()
             listenThread_.start();
             ui->sendBox->setReadOnly(false);
             setStatusBarText("Status: Connected to " + serverIp_);
+            isConnected_ = true;
         }
         else
         {
@@ -156,6 +158,11 @@ void MainWindow::on_action_Join_Server_triggered()
 */
 void MainWindow::on_action_Leave_Server_triggered()
 {
+    if (!isConnected_)
+    {
+        return;
+    }
+    listenThread_.terminate();
     if (closeSocket(&mySocket_) == -1)
     {
         setStatusBarText("Status: Unable to disconnect");
@@ -165,6 +172,7 @@ void MainWindow::on_action_Leave_Server_triggered()
         ui->sendBox->setReadOnly(true);
         ui->pushButtonSend->setDisabled(true);
         setStatusBarText("Status: Disconnected");
+        isConnected_ = false;
     }
 }
 

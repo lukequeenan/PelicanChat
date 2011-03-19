@@ -37,6 +37,7 @@ private:
     // Connection data members
     int serverPort_;
     bool append_info_;
+    bool isConnected_;
     QString serverIp_;
     QString myName_;
     QString message_;
