@@ -384,9 +384,16 @@ void MainWindow::writeFile(const char* data)
 */
 void MainWindow::dataReceived(QString data)
 {
-    ui->messageBox->append(data);
-    if(append_info_) {
-        data.prepend("\n");
-        writeFile(qPrintable(data));
+    if (data[0] == '\0')
+    {
+        on_action_Leave_Server_triggered();
+    }
+    else
+    {
+        ui->messageBox->append(data);
+        if(append_info_) {
+            data.prepend("\n");
+            writeFile(qPrintable(data));
+        }
     }
 }

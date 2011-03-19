@@ -53,6 +53,12 @@ void ListenThread::run()
             QString data(buffer + 1);
             emit ListenThread::textMessageReceived(data);
         }
+        else
+        {
+            // Received some garbage data, so send shutdown message and quit
+            emit ListenThread::textMessageReceived("\0");
+            break;
+        }
     }
 }
 
