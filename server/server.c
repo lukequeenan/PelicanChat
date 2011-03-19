@@ -229,7 +229,7 @@ int processMessage(int clientIndex, int clients[], int numberOfClients,
         break;
     case TEXT_MESSAGE:
         // Pass the message on to other clients
-        for (count = 0; count < numberOfClients; count++)
+        for (count = 0; count <= numberOfClients; count++)
         {
             if (clients[count] > 0 && clients[count] != clients[clientIndex])
             {
