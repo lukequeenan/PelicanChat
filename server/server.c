@@ -176,7 +176,7 @@ void server (int port, int maxClients)
                         systemFatal("Cannot Close Socket!");
                     }
                     FD_CLR(clientSocket, &fileDescriptorSet);
-                    clients[clientIndex] = FREE;
+                    clients[index] = FREE;
                 }
                 // See if there are any more clients to check
                 if (--selectReturn <= 0)
@@ -243,6 +243,7 @@ int processMessage(int clientIndex, int clients[], int numberOfClients,
     default:
         // If the message type is empty or not recognized, disconnect the client
         connectedClients[clientIndex].ip[0] = '\0';
+        strcpy(connectedClients[clientIndex].name, "N/A");
         displayConnectedClients(&connectedClients[0], numberOfClients);
         free(buffer);
         return -1;
