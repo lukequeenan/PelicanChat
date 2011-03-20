@@ -378,7 +378,7 @@ void MainWindow::writeFile(const char* data)
     if( !f.open( IO_WriteOnly | IO_Append ) )
     {
       //error occured
-        qDebug("error");
+        qDebug("error writing to file");
     }
 
     f.write(data);
