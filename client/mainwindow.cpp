@@ -162,7 +162,12 @@ void MainWindow::on_action_Leave_Server_triggered()
     {
         return;
     }
-    listenThread_.terminate();
+    const char* text = "\0";
+    if (!sendData(&mySocket_, &(*text), BUFFER_LENGTH))
+    {
+        // Display error message here
+    }
+    //listenThread_.wait();
     if (closeSocket(&mySocket_) == -1)
     {
         setStatusBarText("Status: Unable to disconnect");
