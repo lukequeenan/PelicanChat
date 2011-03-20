@@ -47,7 +47,6 @@ void ListenThread::run()
     int bytesRead = 0;
     char *buffer = (char*)malloc(sizeof(char) * BUFFER_LENGTH);
     while(true) {
-        // May need to change this to use select so that we can write
         bytesRead = readData(&(*mySocket_), &(*buffer), BUFFER_LENGTH);
         if(buffer[0] == TEXT_MESSAGE) {
             QString data(buffer + 1);
@@ -57,7 +56,6 @@ void ListenThread::run()
         else
         {
             // Received some garbage data, so quit
-            //emit ListenThread::textMessageReceived("\0");
             break;
         }
     }
