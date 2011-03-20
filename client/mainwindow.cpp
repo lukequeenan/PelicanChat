@@ -167,7 +167,9 @@ void MainWindow::on_action_Leave_Server_triggered()
     {
         // Display error message here
     }
-    //listenThread_.wait();
+    QObject::disconnect(&listenThread_,
+                     SIGNAL(textMessageReceived(QString)), this,
+                     SLOT(dataReceived(QString)));
     if (closeSocket(&mySocket_) == -1)
     {
         setStatusBarText("Status: Unable to disconnect");
@@ -404,16 +406,9 @@ void MainWindow::writeFile(const char* data)
 */
 void MainWindow::dataReceived(QString data)
 {
-    if (data[0] == '\0')
-    {
-        on_action_Leave_Server_triggered();
-    }
-    else
-    {
-        ui->messageBox->append(data);
-        if(append_info_) {
-            data.prepend("\n");
-            writeFile(qPrintable(data));
-        }
+    ui->messageBox->append(data);
+    if(append_info_) {
+        data.prepend("\n");
+        writeFile(qPrintable(data));
     }
 }
